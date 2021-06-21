@@ -41,7 +41,7 @@ always @(posedge i_clk,negedge i_rstn) begin
     end else begin
         if (i_we) begin
             if (i_rd_addr==5'd0) begin
-                regfile[i_rd_addr]=32'h0;
+                regfile[i_rd_addr]<=32'h0;
             end else begin
                 regfile[i_rd_addr] <= i_data;
             end
