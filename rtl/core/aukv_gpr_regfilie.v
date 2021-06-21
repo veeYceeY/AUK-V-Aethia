@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////
 //Author      : Vipin.VC
 //Project     : Auk-V
-//Description : Simple RV32I processor
+//Description : RV32I CPU
 //              With 5 stage pipeline
 //              Brach always not taken
 // 
