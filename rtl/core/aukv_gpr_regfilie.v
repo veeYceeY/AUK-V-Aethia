@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////
+//       _____         __            ____   ____
+//      /  _  \  __ __|  | __        \   \ /   /
+//     /  /_\  \|  |  \  |/ /  ______ \   Y   / 
+//    /    |    \  |  /    <  /_____/  \     /  
+//    \____|__  /____/|__|_ \           \___/   
+//            \/           \/                   
+//
+///////////////////////////////////////////////////////////////////
+//Author      : Vipin.VC
+//Project     : Auk-V
+//Description : Simple RV32I processor
+//              With 5 stage pipeline
+//              Brach always not taken
+// 
+//File type   : Verilog RTL
+//Description : Integer register file
+//
+////////////////////////////////////////////////////////////////////
 
 module aukv_gpr_regfile(i_clk,i_rstn,i_rs1_addr,i_rs2_addr,i_rd_addr,i_we,i_data,o_rs1data,o_rs2data);
 
