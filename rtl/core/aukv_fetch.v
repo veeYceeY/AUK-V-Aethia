@@ -28,27 +28,26 @@ module aukv_fetch
 
 input i_clk;
 input i_rstn;
-input i_instr_data;
+input [31:0] i_instr_data;
 input i_instr_data_valid;
 output o_instr_addr_valid;
-output o_instr_addr;
+output [31:0] o_instr_addr;
 input i_stall;
 input [31:0] i_branch_addr;
 input [31:0] i_evec_addr;
 input i_branch_en;
 input i_exception;
 
-output o_pc;
-output o_instr;
+output [31:0] o_pc;
+output [31:0] o_instr;
 output o_instr_valid;
 
 reg [31:0] pc;
 reg en_buff;
 reg branch_lat;
-reg en_buff;
 reg [31:0] data_buff;
 reg start;
-reg flush;
+//reg flush;
 wire en_stall;
 wire branch_buff;
 wire en;
@@ -110,7 +109,7 @@ always @(posedge i_clk,negedge i_rstn) begin
             end
         end else begin
             if (i_branch_en) begin
-                flush<=1'b1;
+                //flush<=1'b1;
                 pc<= i_branch_addr + 32'h4;
             end else begin
                 if (en) begin
