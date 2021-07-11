@@ -28,7 +28,7 @@ module aukv_alu ( i_clk,i_rstn,
 
 input i_clk;
 input i_rstn;
-input [2:0] i_operation;
+input [3:0] i_operation;
 input [31:0] i_rs1;
 input [31:0] i_rs2;
 
