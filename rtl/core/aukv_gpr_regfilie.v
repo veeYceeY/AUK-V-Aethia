@@ -18,7 +18,7 @@
 //
 ////////////////////////////////////////////////////////////////////
 
-module aukv_gpr_regfile(i_clk,i_rstn,i_rs1_addr,i_rs2_addr,i_rd_addr,i_we,i_data,o_rs1data,o_rs2data);
+module aukv_gpr_regfile(i_clk,i_rstn,i_rs1_addr,i_rs2_addr,i_rd_addr,i_we,i_rd_data,o_rs1data,o_rs2data);
 
 
 input i_clk;
@@ -26,7 +26,7 @@ input i_rstn;
 input [4:0] i_rs1_addr;
 input [4:0] i_rs2_addr;
 input [4:0] i_rd_addr;
-input [31:0] i_data;
+input [31:0] i_rd_data;
 input i_we;
 output [31:0] o_rs1data;
 output [31:0] o_rs2data;
@@ -43,7 +43,7 @@ always @(posedge i_clk,negedge i_rstn) begin
             if (i_rd_addr==5'd0) begin
                 regfile[i_rd_addr]<=32'h0;
             end else begin
-                regfile[i_rd_addr] <= i_data;
+                regfile[i_rd_addr] <= i_rd_data;
             end
         end
     end
