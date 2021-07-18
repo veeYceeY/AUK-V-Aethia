@@ -15,12 +15,12 @@ module wb_arbiter(i_clk,i_rstn,
 
 input i_clk;
 input i_rstn;
-input [`WB_M2S]i_m2s0_wb;
-input [`WB_M2S]i_m2s1_wb;
-output [`WB_M2S]o_m2s_wb;
-input [`WB_S2M]i_s2m_wb;
-output [`WB_S2M]o_s2m0_wb;
-output [`WB_S2M]o_s2m1_wb;
+input `WB_M2S i_m2s0_wb;
+input `WB_M2S i_m2s1_wb;
+output `WB_M2S o_m2s_wb;
+input `WB_S2M i_s2m_wb;
+output `WB_S2M o_s2m0_wb;
+output `WB_S2M o_s2m1_wb;
 
 reg [1:0] state;
 
@@ -32,19 +32,19 @@ always @(posedge i_clk,negedge i_rstn) begin
 	end else begin
 		case(state) 
 		`ST_IDLE:
-			if (i_m2s1_wb[`CYC]) begin
+			if (i_m2s1_wb`cyc) begin
 				state<=`ST_M1_ACTIVE;
 			end else begin
-				if(i_m2s0_wb[`CYC]) begin
+				if(i_m2s0_wb`cyc) begin
 					state<=`ST_M0_ACTIVE;
 				end
 			end
 		`ST_M0_ACTIVE:
-			if (i_m2s0_wb[`CYC]) begin
+			if (i_m2s0_wb`cyc) begin
 				state<=`ST_IDLE;
 			end
 		`ST_M1_ACTIVE:
-			if (i_m2s0_wb[`CYC]) begin
+			if (i_m2s0_wb`cyc) begin
 				state<=`ST_IDLE;
 			end
 		default:
