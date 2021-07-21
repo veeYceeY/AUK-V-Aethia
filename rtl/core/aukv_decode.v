@@ -107,7 +107,7 @@ wire  [2:0] br_type        ;
 wire  cmp_op1sel     ;
 wire  [1:0] exe_res_sel    ;
 wire  [3:0] alu_op_sel     ;
-wire  [1:0] p2_sel        ;
+wire  [1:0] op2_sel        ;
 wire  [1:0] op1_sel        ;
 wire  [1:0]mm_sel        ;
 wire  op_sign        ;
@@ -144,6 +144,26 @@ wire [2:0] funct3;
 wire [6:0] funct7;
 wire [31:0] rs1_csr;
 wire [31:0] csr_data;
+
+wire [6:0] opcode;
+
+
+wire [31:0] imm_u;
+wire [31:0] imm_i;
+wire [31:0] imm_j;
+wire [31:0] imm_b;
+wire [31:0] imm_s;
+wire [31:0] imm;
+
+wire [4:0] rs1;
+wire [4:0] rs2;
+wire [4:0] rd;
+wire [2:0] imm_sel;
+wire [1:0] rs1_fwsel;
+wire [1:0] rs2_fwsel;
+wire mem_fwsel;
+
+
 assign instr= ~i_flush? i_instr  : 32'h33;
 assign opcode = instr[6 : 0];
 assign rd = instr[11 : 7];
@@ -152,14 +172,32 @@ assign rs1 = instr[19 : 15];
 assign rs2 = instr[24 : 20];
 assign funct7 = instr[31 : 25];
 
-assign imms_i =    {{8{instr[31]}},instr[31 : 20]};
-assign imms_s =    {{8{instr[31]}},instr[31 : 25] , instr[11 : 7]};
+//imms_i <=    x"00000" & instr(31 downto 20)                                                                when instr(31) = '0' else    
+//            x"fffff" & instr(31 downto 20);
+//imms_s <=    x"00000" & instr(31 downto 25) & instr(11 downto 7)                                           when instr(31) = '0' else    
+//            x"fffff" & instr(31 downto 25) & instr(11 downto 7);
+//imms_u <=    instr(31 downto 12) & x"000";
+//imms_b <=    "000" & x"0000" & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & '0'       when instr(31) = '0' else    
+//            "111" & x"ffff" & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & '0';
+//imms_j <=    "000" & x"00" & instr(31 )  & instr(19 downto 12) & instr(20) & instr( 30 downto 21)  & '0'   when instr(31) = '0' else    
+//            "111" & x"ff" & instr(31 )  & instr(19 downto 12) & instr(20) & instr( 30 downto 21)  & '0';
+
+//immu_i <=    x"00000" & instr(31 downto 20);
+//immu_s <=    x"00000" & instr(31 downto 25) & instr(11 downto 7) ;
+//immu_u <=    x"000" & instr(31 downto 12);
+//immu_b <=    "000" & x"0000" & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & '0';
+//immu_j <=    "000" & x"00" & instr(31)  & instr(19 downto 12) & instr(20) & instr( 30 downto 21)  & '0';
+
+
+
+assign imms_i =    {{20{instr[31]}},instr[31 : 20]};
+assign imms_s =    {{20{instr[31]}},instr[31 : 25] , instr[11 : 7]};
 assign imms_u =    {instr[31 : 12] , 12'h0};
 assign imms_b =    {{19{instr[31]}},instr[31] , instr[7] , instr[30 : 25] , instr[11 : 8] , 1'b0};
 assign imms_j =    {{11{instr[31]}},instr[31 ]  , instr[19 : 12] , instr[20] , instr[ 30 : 21]  , 1'b0};
 
-assign immu_i =    {{8{1'b0}},instr[31 : 20]};
-assign immu_s =    {{8{1'b0}},instr[31 : 25] , instr[11 : 7]};
+assign immu_i =    {{20{1'b0}},instr[31 : 20]};
+assign immu_s =    {{20{1'b0}},instr[31 : 25] , instr[11 : 7]};
 assign immu_u =    {instr[31 : 12] , 12'h0};
 assign immu_b =    {{19{1'b0}},instr[31] , instr[7] , instr[30 : 25] , instr[11 : 8] , 1'b0};
 assign immu_j =    {{11{1'b0}},instr[31 ]  , instr[19 : 12] , instr[20] , instr[ 30 : 21]  , 1'b0};
@@ -168,7 +206,7 @@ assign imm_r = {27'h0,rs2};
 
 
 assign csr_address= uc_addr == 8'h30 ? 12'h341 : instr[31 : 20] ;
-assign o_uc_addr        = uc_addr;
+//assign o_uc_addr        = uc_addr;
 assign store_type       =uc[1 : 0];
 assign wb_we            =uc[2];
 assign wb_data_sel      =uc[3];
@@ -259,7 +297,7 @@ always @(posedge i_clk,negedge i_rstn) begin
                 //wb_wr_buff <= 5'h0;
             end else begin
                 fw_bu00[0] <= rd ;
-                if (mem_en) begin
+                if (mem_en & mem_we) begin
                     fw_bu00[1] <= 5'h0;
                 end else begin
                     fw_bu00[1] <= fw_bu00[0];
@@ -279,7 +317,7 @@ always @(posedge i_clk,negedge i_rstn) begin
     end
 end
 
-assign mem_fwsel= mem_en & rs2 == fw_bu00[0]  & wb_we_buff[0] & rs2 !=32'h0 ;
+assign mem_fwsel= mem_en & (rs2 == fw_bu00[0])  & wb_we_buff[0] & (rs2 !=32'h0) ;
 
 
 //always @(posedge i_clk,negedge i_rstn) begin
@@ -290,14 +328,15 @@ assign mem_fwsel= mem_en & rs2 == fw_bu00[0]  & wb_we_buff[0] & rs2 !=32'h0 ;
 //    end
 //end
 
-assign rs1_fwsel =  fw_bu00[0] == rs1 & wb_we_buff[0]  & rs1!=32'h0 ? 2'h1 :
-                fw_bu00[1] == rs1 & wb_we_buff[1] & rs1 !=32'h0  ? 2'h2 :
-                fw_bu00[2] == rs1 & wb_we_buff[2] & rs1 !=32'h0  ? 2'h3 :
+
+assign rs1_fwsel =  (fw_bu00[0] == rs1 & wb_we_buff[0])  & (rs1!=32'h0) ? 2'h1 :
+                (fw_bu00[1] == rs1 & wb_we_buff[1]) & (rs1 !=32'h0)  ? 2'h2 :
+                (fw_bu00[2] == rs1 & wb_we_buff[2]) & (rs1 !=32'h0)  ? 2'h3 :
                 2'b0;
                 
-assign rs2_fwsel = fw_bu00[0] == rs2 & wb_we_buff[0] & rs2 !=32'h0 ? 2'h1:
-                fw_bu00[1] == rs2 & wb_we_buff[1] & rs2 !=32'h0 ? 2'h2:
-                fw_bu00[2] == rs2 & wb_we_buff[2] & rs2 !=32'h0 ? 2'h3:
+assign rs2_fwsel = (fw_bu00[0] == rs2 & wb_we_buff[0]) & (rs2 !=32'h0) ? 2'h1:
+                (fw_bu00[1] == rs2 & wb_we_buff[1]) & (rs2 !=32'h0) ? 2'h2:
+                (fw_bu00[2] == rs2 & wb_we_buff[2]) & (rs2 !=32'h0) ? 2'h3:
                 2'b0;
 
 assign mem_wr= mem_en ;
