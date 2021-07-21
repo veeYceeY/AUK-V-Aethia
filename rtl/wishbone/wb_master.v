@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////
+//       _____         __            ____   ____
+//      /  _  \  __ __|  | __        \   \ /   /
+//     /  /_\  \|  |  \  |/ /  ______ \   Y   / 
+//    /    |    \  |  /    <  /_____/  \     /  
+//    \____|__  /____/|__|_ \           \___/   
+//            \/           \/                   
+//
+///////////////////////////////////////////////////////////////////
+//Author      : Vipin.VC
+//Project     : Auk-V
+//Description : RV32I CPU
+//              With 5 stage pipeline
+//              Brach always not taken
+// 
+//File type   : Verilog RTL
+//Description : native to wishbone master
+//
+////////////////////////////////////////////////////////////////////
 
 `define ST_IDLE 2'b00
 `define ST_WR_ACK_WAIT 2'b01
@@ -11,7 +30,7 @@ module wb_master(
 		o_valid,o_data,
 		
 		i_wb,
-		o_wb,
+		o_wb
 );
 
 `include "package.vh"
@@ -32,7 +51,7 @@ input `WB_S2M i_wb;
 output reg `WB_M2S o_wb;
 
 
-reg state;
+reg [1:0]state;
 reg r_ack;
 
 
@@ -44,6 +63,8 @@ always@(posedge i_clk,negedge i_rstn) begin
 		o_wb`cyc<='b0;
 		o_wb`stb<='b0;
 		o_wb`we<='b0;
+		r_ack<=1'b0;
+		state<=`ST_IDLE;
 	end else begin
 		case(state) 
 		`ST_IDLE: begin
