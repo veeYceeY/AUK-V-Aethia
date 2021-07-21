@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////
+//       _____         __            ____   ____
+//      /  _  \  __ __|  | __        \   \ /   /
+//     /  /_\  \|  |  \  |/ /  ______ \   Y   / 
+//    /    |    \  |  /    <  /_____/  \     /  
+//    \____|__  /____/|__|_ \           \___/   
+//            \/           \/                   
+//
+///////////////////////////////////////////////////////////////////
+//Author      : Vipin.VC
+//Project     : Auk-V
+//Description : RV32I CPU
+//              With 5 stage pipeline
+//              Brach always not taken
+// 
+//File type   : Verilog RTL
+//Description : wishbone structure package
+//
+////////////////////////////////////////////////////////////////////
 
 `define WB_M2S [70:0]
 `define WB_S2M [32:0]
@@ -20,6 +39,6 @@
 
 `define ACK [0]
 
-`define MASK_ADDR {32'h0,39{1'b1}}
+`define MASK_ADDR {71'h007fffffffff}
 
 
