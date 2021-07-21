@@ -3,6 +3,25 @@
 `define ST_M0_ACTIVE 2'b01
 `define ST_M1_ACTIVE 2'b10 
 
+///////////////////////////////////////////////////////////////////
+//       _____         __            ____   ____
+//      /  _  \  __ __|  | __        \   \ /   /
+//     /  /_\  \|  |  \  |/ /  ______ \   Y   / 
+//    /    |    \  |  /    <  /_____/  \     /  
+//    \____|__  /____/|__|_ \           \___/   
+//            \/           \/                   
+//
+///////////////////////////////////////////////////////////////////
+//Author      : Vipin.VC
+//Project     : Auk-V
+//Description : RV32I CPU
+//              With 5 stage pipeline
+//              Brach always not taken
+// 
+//File type   : Verilog RTL
+//Description : wishbone arbiter
+//
+////////////////////////////////////////////////////////////////////
 
 module wb_arbiter(i_clk,i_rstn,
 	i_m2s0_wb,o_s2m0_wb,
@@ -40,11 +59,11 @@ always @(posedge i_clk,negedge i_rstn) begin
 				end
 			end
 		`ST_M0_ACTIVE:
-			if (i_m2s0_wb`cyc) begin
+			if (~i_m2s0_wb`cyc) begin
 				state<=`ST_IDLE;
 			end
 		`ST_M1_ACTIVE:
-			if (i_m2s0_wb`cyc) begin
+			if (~i_m2s1_wb`cyc) begin
 				state<=`ST_IDLE;
 			end
 		default:
