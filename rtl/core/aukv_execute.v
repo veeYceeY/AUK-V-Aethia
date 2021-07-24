@@ -1,4 +1,23 @@
- 
+ ///////////////////////////////////////////////////////////////////
+//       _____         __            ____   ____
+//      /  _  \  __ __|  | __        \   \ /   /
+//     /  /_\  \|  |  \  |/ /  ______ \   Y   / 
+//    /    |    \  |  /    <  /_____/  \     /  
+//    \____|__  /____/|__|_ \           \___/   
+//            \/           \/                   
+//
+///////////////////////////////////////////////////////////////////
+//Author      : Vipin.VC
+//Project     : Auk-V
+//Description : RV32I CPU
+//              With 5 stage pipeline
+//              Brach always not taken
+// 
+//File type   : Verilog RTL
+//Description : Execute
+//
+////////////////////////////////////////////////////////////////////
+
 module aukv_execute(
             i_clk           ,
             i_rstn           ,
@@ -209,7 +228,7 @@ assign operand2= i_op2_sel == 2'h0 ? rs2 :
                               ZERO32 ;
              
              
-assign cm_op1 = ~i_cmp_op1_sel ? rs2 : i_imm;
+assign cmp_op1 = ~i_cmp_op1_sel ? rs2 : i_imm;
 aukv_alu ALU0 (
             .i_clk       (i_clk),
             .i_rstn       (i_rstn),   
@@ -237,7 +256,7 @@ assign set_result = {31'h0,cmp_result};
 assign next_instr_addr = i_pc+FOUR32;
 
 assign branch_addr = i_csr_sel ? i_csr_rd_data : 
-                     i_br_addr_sel ? ~alu0_result : i_imm;
+                     ~i_br_addr_sel ? alu0_result : i_imm;
 
 assign exe_result = i_res_sel == 2'h0 ? alu0_result :
                     i_res_sel == 2'h2 ? set_result  :
