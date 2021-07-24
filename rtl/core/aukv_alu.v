@@ -50,21 +50,6 @@ wire ge_s;
 wire eq_s;
 wire ne_s;
 
-reg [31:0] result;
-reg [31:0] sum;
-reg [31:0] dif;
-reg [31:0] anded;
-reg [31:0] ored;
-reg [31:0] xored;
-reg [31:0] shiftleft;
-reg [31:0] shiftright_logic;
-reg [31:0] shiftright_arith;
-reg [31:0] zero;
-reg [31:0] sign;
-reg [31:0] shamt;
-reg [31:0] s_lt;
-
-
 assign o_rd =  ~i_rstn             ? 32'd0           :
                 i_operation == 4'd0 ? i_rs1 +   i_rs2 :
                 i_operation == 4'd1 ? i_rs1 -   i_rs2 :
