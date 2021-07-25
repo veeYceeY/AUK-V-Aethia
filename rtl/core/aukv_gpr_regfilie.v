@@ -36,12 +36,12 @@ integer i;
 always @(posedge i_clk,negedge i_rstn) begin
     if (~i_rstn) begin
         for(i=0;i<32;i=i+1)begin
-            regfile[i]<=32'h0;
+            regfile[i] <=32'h0;
         end
     end else begin
         if (i_we) begin
             if (i_rd_addr==5'd0) begin
-                regfile[i_rd_addr]<=32'h0;
+                regfile[i_rd_addr] <=32'h0;
             end else begin
                 regfile[i_rd_addr] <= i_rd_data;
             end
