@@ -67,7 +67,7 @@ always @(posedge i_clk,negedge i_rstn) begin
         branch_lat<=1'b0;
     end else begin
         if (branch_buff) begin
-            if (branch_lat) begin
+            if (branch) begin
                 branch_lat<=1'b1;
             end
         end else begin
@@ -90,7 +90,7 @@ always @(posedge i_clk,negedge i_rstn) begin
                 data_buff<=i_instr_data;
             end
         end else begin
-            if (i_stall) begin
+            if (~i_stall) begin
                 en_buff<=1'b0;
             end
         end
@@ -101,7 +101,7 @@ end
 
 always @(posedge i_clk,negedge i_rstn) begin
     if (~i_rstn) begin
-        pc<=32'h33;
+        pc<=32'h00000000;
     end else begin
         if (i_stall) begin
             if (i_exception) begin
@@ -126,7 +126,7 @@ assign en=i_rstn & (i_instr_data_valid | start | en_buff | branch) & (~i_stall);
 assign ins_valid = (i_instr_data_valid & (~branch) & (~branch_buff)  & (~i_stall)) & (~start);
 assign t_pc = i_exception? i_evec_addr : i_branch_en? i_branch_addr : pc;
 assign o_instr_addr=t_pc;
-assign o_pc = t_pc+4;
+assign o_pc = t_pc-4;
 assign o_instr=en_stall ? data_buff: ins_valid ? i_instr_data : 32'h33;
 assign o_instr_valid = ins_valid;
 assign o_instr_addr_valid= en;
