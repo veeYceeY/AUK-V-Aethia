@@ -25,7 +25,7 @@ module gpio(
 	i_gpio,o_gpio
 );
 
-`include "../wishbone/package.vh" ;
+`include "../wishbone/package.vh"
 
 input i_clk;
 input i_rstn;

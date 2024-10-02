@@ -142,7 +142,7 @@ wb_master MASTER0(
 		.i_clk(i_clk),
 		.i_rstn(rsyn0_rstn),
 		.i_en(cache0_code_mem_en),
-		.i_we('b0),
+		.i_we(1'b0),
 		.i_addr(cache0_code_mem_address),
 		.i_data(32'h0),
 		.i_strobe(4'b1111),

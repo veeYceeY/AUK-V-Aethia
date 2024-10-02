@@ -18,13 +18,12 @@
 //
 ////////////////////////////////////////////////////////////////////
 
+`include "../wishbone/package.vh" 
 
 module oc_ram(
 	i_clk,i_rstn,
 	i_m2s_wb,o_s2m_wb
-)
-
-`include "../wishbone/package.vh" ;
+);
 
 input i_clk;
 input i_rstn;
