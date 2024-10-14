@@ -37,4 +37,4 @@ aukv_eggs_soc DUT0(
 );
 	
 	
-endmodule;
+endmodule

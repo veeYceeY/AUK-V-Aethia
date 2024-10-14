@@ -23,14 +23,13 @@
 //
 ////////////////////////////////////////////////////////////////////
 
+`include "package.vh"
+
 module wb_arbiter(i_clk,i_rstn,
 	i_m2s0_wb,o_s2m0_wb,
 	i_m2s1_wb,o_s2m1_wb,
 	i_s2m_wb,o_m2s_wb
 );
- 
-
-`include "package.vh" ;
 
 input i_clk;
 input i_rstn;
