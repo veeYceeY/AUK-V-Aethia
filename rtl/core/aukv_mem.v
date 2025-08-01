@@ -96,8 +96,8 @@ reg valid_d1;
 
 
 
-assign mem_data_rd_sb = {{24{i_data_mem_data[7]}},i_data_mem_data};
-assign mem_data_rd_sh = {{16{i_data_mem_data[15]}},i_data_mem_data};
+assign mem_data_rd_sb = {{24{i_data_mem_data[7]}},i_data_mem_data[7:0]};
+assign mem_data_rd_sh = {{16{i_data_mem_data[15]}},i_data_mem_data[15:0]};
 assign mem_data_rd_sw = i_data_mem_data;
 
 assign  mem_data_rd_ub = {{24{1'b0}},i_data_mem_data[7:0]};
